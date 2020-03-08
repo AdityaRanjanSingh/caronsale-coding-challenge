@@ -2,14 +2,11 @@ import { Injectable } from '@angular/core';
 import Axios from 'axios';
 import { AxiosInstance } from 'axios';
 import { API_HOSTNAME, API_PATHS } from '../../constants/api-constants';
-import { IAuction } from '../../interfaces/iauction'
-import { resolve } from 'dns';
-import { rejects } from 'assert';
 @Injectable({
   providedIn: 'root'
 })
 export class AuctionService {
-  private client: AxiosInstance = Axios.create({ baseURL: API_HOSTNAME });
+  public client: AxiosInstance = Axios.create({ baseURL: API_HOSTNAME });
   constructor() { }
   async getRunningAuctions(): Promise<any[]> {
     const userid = sessionStorage.getItem('userId');
@@ -21,7 +18,7 @@ export class AuctionService {
     return new Promise(async (resolve, reject) => {
       try {
         let response = await this.client.get(API_PATHS.auctions, { headers });
-        let formattedAuctionData = this.formatAuctionData(response.data);
+        let formattedAuctionData = this.formatAuctionData(response.data.items);
         resolve(formattedAuctionData)
       } catch (e) {
         reject(e)
@@ -32,10 +29,22 @@ export class AuctionService {
   formatAuctionData(auctionData: any[]): any[] {
     return auctionData.map(item => {
       const endingTime = new Date(item.endingTime);
+      let images = [];
+      let imageUrls = item.associatedVehicle.imageUrls
+      for (let key in imageUrls) {
+        if (imageUrls[key]) {
+          images.push({
+            name: key,
+            url: imageUrls[key]['url']
+          })
 
+        }
+
+      }
       return {
         ...item,
-        remainingTime: `${endingTime.getHours()}:${endingTime.getMinutes()}:${endingTime.getSeconds()}`
+        images,
+        timeRemaining: `${endingTime.getHours()}:${endingTime.getMinutes()}:${endingTime.getSeconds()}`
       }
     })
   }

@@ -1,6 +1,8 @@
 <mat-toolbar color="primary">
     <span>Car on sale</span>
     <span class="spacer"></span>
-
-    <button mat-fab>Logged in</button>
+    <div class="d-flex flex-column justify-content-center" (click)="onLogout()">
+        <i mat-fab [class]="getIconForHeader()"></i>
+        <div>{{loginText}}</div>
+    </div>
 </mat-toolbar>

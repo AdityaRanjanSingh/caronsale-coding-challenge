@@ -1,4 +1,7 @@
 <div class="login-form-container">
+    <div class="alert alert-danger" *ngIf="loginError!==''" role="alert">
+        {{loginError}}
+    </div>
     <form class="form" (ngSubmit)="onSubmit(form)" #form="ngForm">
         <mat-form-field class="full-width">
             <input name="userEmail" ngModel required type="email" matInput placeholder="Email" class=" full-width">

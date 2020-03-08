@@ -1,5 +1,7 @@
+@import "bootstrap/dist/css/bootstrap.css";
 .login-form-container{
   display: flex;
+  flex-direction: column;
   justify-content: center;
   height: 80%;
   align-items: center;;
